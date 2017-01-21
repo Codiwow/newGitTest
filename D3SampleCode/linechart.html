@@ -1,0 +1,104 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Line Chart</title>
+
+	<style>
+
+	.MyPath {
+		fill: none;
+		stroke: steelblue;
+		stroke-width: 5px;
+	}
+
+	.axis path,
+	.axis line{
+		fill: none;
+		stroke: steelblue;
+		shape-rendering: crispEdges;
+	}
+
+	.axis text {
+		font-family: sans-serif;
+		font-size: 12px;
+	}
+
+	</style>
+
+</head>
+<body>
+
+<script src="d3.js" charset="utf-8"></script>
+<script>
+
+var body = d3.select("body");
+
+var width = 400;
+var height = 400;
+
+var svg = body.append("svg")
+			.attr("width", 400)
+			.attr("height", 400);
+
+// 1. Read Json File
+
+d3.json("test.json", function(error, jsondata){
+
+	if(error)
+		console.log(error);
+
+	console.log(jsondata);
+
+	var xmax = d3.max(jsondata.testdata, function(d){
+		return d.x;
+	});
+
+	var ymax = d3.max(jsondata.testdata, function(d){
+		return d.y;
+	});
+
+	var xScale = d3.scale.linear()
+					.domain([0, xmax])
+					.range([0, 300]);
+
+	var yScale = d3.scale.linear()
+					.domain([0, ymax])
+					.range([250, 0]);
+
+	var xAxis = d3.svg.axis()
+				.scale(xScale)
+				.orient("bottom");
+
+	var gxAxis = svg.append("g")
+					.attr("class","axis")
+					.attr("transform","translate(30,350)")
+					.call(xAxis);
+
+	var yAxis = d3.svg.axis()
+					.scale(yScale)
+					.orient("left");
+
+	var gyAxis = svg.append("g")
+					.attr("class","axis")
+					.attr("transform","translate(30,100)")
+					.call(yAxis);
+
+	// line generator
+	var line = d3.svg.line()
+			.x( function(d){ return xScale(d.x); } )
+			.y( function(d){ return yScale(d.y); } )
+			.interpolate("step");
+
+	// line chart
+	svg.append("path")
+		.attr("class","MyPath")
+		.attr("d", line(jsondata.testdata) )
+		.attr("transform","translate(30,100)");
+
+});
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Progress</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	body{
+		margin: 50px;
+	}
+	.wrap{
+		width: 300px;
+		height: 30px;
+		border: 1px solid #ccc;
+	}
+	.progress{
+		height: 30px;
+		background: #abcdef;
+		width: 10px;
+	}
+	</style>
+	<script src="jquery.js"></script>
+	<script>
+		$(function(){
+			var span = $('span');
+			var now = 0;
+			var timeId = null;
+			var progress = $('.progress');
+			var wrapWidth = $('.wrap').width();
+			timeId = setInterval(function(){
+				now+=2;
+				if(now==100){
+					clearInterval(timeId);
+				}
+				span.text(now+'%');
+				progress.width(now/100*wrapWidth);
+			},50);
+		});
+	</script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="progress"></div>
+	</div>
+	<span>0%</span>
+</body>
+</html>

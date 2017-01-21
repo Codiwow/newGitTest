@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Reactjs Two Way Data Flow</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="bower_components/react/react-with-addons.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+	<script type="text/jsx">
+		var EasyForm = React.createClass({
+			mixins: [ React.addons.LinkedStateMixin ],
+			getInitialState:function(){
+				return {
+					message: 'Love the React?',
+					isReactAwesome: true,
+				}
+			},
+			render:function(){
+				return (
+					<div>
+						<h1>Do you {this.state.message}</h1>
+						<h2>Love React.js? {this.state.isReactAwesome?'Yes！':'Not really...'}</h2>
+						<input type="text" valueLink={this.linkState('message')} />
+						<br/>
+						<input type="checkbox" checkedLink={this.linkState('isReactAwesome') } />
+						<br/>
+						<SubComp messageLink={ this.linkState('message') } likeLink={this.linkState('isReactAwesome')} />
+
+					</div>
+				)
+			}
+		});
+
+		var SubComp = React.createClass({
+			render:function(){
+				return (
+					<div>
+						<h3>This is sub component</h3>
+						<SubSubComp {...this.props } />
+					</div>
+				)
+			}
+		});
+
+		var SubSubComp = React.createClass({
+			render:function(){
+				return (
+					<div>
+						<p>What to do next?</p>
+						<input type="text" valueLink={ this.props.messageLink } />
+						<p>Start to use React?</p>
+						<input type="checkbox" checkedLink = {this.props.likeLink } />
+					</div>
+				)
+			}
+		})
+
+
+		React.render( <EasyForm />, document.getElementById('app') );
+
+	</script>
+
+</body>
+
+</html>
